@@ -1,9 +1,9 @@
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { Priority } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
 import { ModalButton } from "~/components/ModalButton/ModalButton";
