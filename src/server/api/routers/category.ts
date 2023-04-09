@@ -8,7 +8,7 @@ export const categoryRouter = createTRPCRouter({
       return await ctx.prisma.category.create({
         data: {
           ...input,
-          userId: ctx.currentUser.id,
+          userId: ctx.userId,
         },
       });
     }),
@@ -16,8 +16,8 @@ export const categoryRouter = createTRPCRouter({
     return await ctx.prisma.category.findMany({
       take: 100,
       where: {
-        userId: ctx.currentUser.id
-      }
+        userId: ctx.userId,
+      },
     });
   }),
 });

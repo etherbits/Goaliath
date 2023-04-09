@@ -6,7 +6,6 @@ const goalSchema = z.object({
   description: z.string(),
   priority: z.nativeEnum(Priority),
   deadline: z.date().min(new Date()),
-  isActive: z.boolean(),
   isPublic: z.boolean(),
   categoryId: z.string().min(1),
 });
