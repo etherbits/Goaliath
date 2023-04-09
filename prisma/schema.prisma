@@ -1,17 +1,60 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
-model Example {
+model Task {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    name        String    @db.Text
+    deadline    DateTime?
+    isMilestone Boolean
+    isComplete  Boolean
+    goalId      String
+    goal        Goal      @relation(fields: [goalId], references: [id])
+
+    @@index([goalId])
+}
+
+model Goal {
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    title       String
+    description String?   @db.Text
+    priority    Priority  @default(LOW)
+    deadline    DateTime?
+    isActive    Boolean   @default(true)
+    isPublic    Boolean   @default(false)
+    categoryId  String
+    category    Category  @relation(fields: [categoryId], references: [id])
+    tasks       Task[]
+    userId      String
+
+    @@index([categoryId])
+    @@index([userId])
+}
+
+model Category {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    name      String
+    icon      String
+    userId    String
+    goals     Goal[]
+
+    @@index([userId])
+}
+
+enum Priority {
+    HIGH
+    MEDIUM
+    LOW
 }

@@ -15,7 +15,7 @@ const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 const MyApp: AppType = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
   const isPublicPage = publicPages.includes(pathname);
-  return (
+  return ( 
     <ClerkProvider
       {...pageProps}
       appearance={{
