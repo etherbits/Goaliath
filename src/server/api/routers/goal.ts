@@ -1,7 +1,6 @@
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import goalSchema from "~/schema/goal";
-import { Prisma } from "@prisma/client";
 
 export const goalRouter = createTRPCRouter({
   create: privateProcedure

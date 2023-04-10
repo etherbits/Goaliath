@@ -1,8 +1,3 @@
-import type {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "@tanstack/react-query";
 import React, { useContext, useState } from "react";
 import { Button } from "~/components/Button";
 import { ModalContext } from "~/context/useModal";
@@ -31,7 +26,7 @@ export const CreateCategory: React.FC<Props> = ({ refetchCategories }) => {
       name,
       icon,
     });
-    
+
     toggleModal();
   };
 
