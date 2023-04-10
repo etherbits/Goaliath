@@ -1,70 +1,27 @@
 import { useUser } from "@clerk/nextjs";
-import { Priority } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
-import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
-import { ModalButton } from "~/components/ModalButton/ModalButton";
+import { ModalButton } from "~/components/ModalButton";
+import { CreateCategory } from "~/components/modals/CreateCategory/CreateCategory";
+import { CreateGoal } from "~/components/modals/CreateGoal";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { user } = useUser();
 
-  // for categories
   const { data: categories, refetch: refetchCategories } =
     api.category.getAll.useQuery(undefined, {
       enabled: !!user,
     });
 
-  const { mutate: mutateCategory } = api.category.create.useMutation({
-    onSuccess: () => {
-      void refetchCategories();
-    },
-  });
-
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("/assets/images/box.svg");
-
-  const handleCategorySubmit = () => {
-    mutateCategory({
-      name,
-      icon,
-    });
-  };
-
-  // for goals
   const { data: goals, refetch: refetchGoals } = api.goal.getAll.useQuery(
-    undefined,
+    { sortBy: { field: "deadline", order: "asc" } },
     {
       enabled: !!user,
     }
   );
-
-  const { mutate: mutateGoal } = api.goal.create.useMutation({
-    onSuccess: () => {
-      void refetchGoals();
-    },
-  });
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState<Priority>(Priority.LOW);
-  const [deadline, setDeadline] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  const [categoryId, setCategoryId] = useState("");
-
-  const handleGoalSubmit = () => {
-    mutateGoal({
-      title,
-      description,
-      priority,
-      deadline: new Date(deadline),
-      isPublic,
-      categoryId,
-    });
-  };
 
   return (
     <>
@@ -76,52 +33,19 @@ const Home: NextPage = () => {
       <div className="flex min-h-screen flex-col bg-neutral-900">
         <Header />
         <main className="flex flex-col gap-8 p-12">
-          <span className="text-red-400">
-            Cancel button does not work for now :{"("}
-          </span>
-          <span className="text-red-400"></span>
-          {/* Modal for categories */}
           <ModalButton
             variant="primary"
             ModalComponent={
-              <form
-                className="flex flex-col items-center gap-4 rounded-md bg-neutral-800 p-7"
-                onSubmit={handleCategorySubmit}
-              >
-                <h3 className="text-lg font-medium text-neutral-50">
-                  Create Category
-                </h3>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  className=" w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                />
-                <input
-                  type="text"
-                  name="icon"
-                  placeholder="icon path"
-                  value={icon}
-                  onChange={(e) => {
-                    setIcon(e.target.value);
-                  }}
-                  className="w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                />
-                <div className="flex w-full justify-between gap-4">
-                  <Button type="button" variant="secondary">
-                    CANCEL
-                  </Button>
-                  <Button type="submit">SUBMIT</Button>
-                </div>
-              </form>
+              <CreateCategory
+                refetchCategories={() => {
+                  void refetchCategories();
+                }}
+              />
             }
           >
             Add Category
           </ModalButton>
+
           <ul className="flex flex-col gap-4 ">
             {categories?.map((category) => (
               <li key={category.id} className="flex gap-2">
@@ -135,108 +59,25 @@ const Home: NextPage = () => {
               </li>
             ))}
           </ul>
-          {/* Modal for goals */}
+
           <ModalButton
             variant="primary"
             ModalComponent={
-              <form
-                className="flex flex-col items-center gap-4 rounded-md bg-neutral-800 p-7"
-                onSubmit={handleGoalSubmit}
-              >
-                <h3 className="text-lg font-medium text-neutral-50">
-                  Create Goal
-                </h3>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="title"
-                  value={title}
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  className=" w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                />
-                <textarea
-                  name="description"
-                  placeholder="description..."
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
-                  className="w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                />
-                <select
-                  name="priority"
-                  value={priority}
-                  onChange={(e) => {
-                    setPriority(e.target.value as Priority);
-                  }}
-                  className="w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                >
-                  {Object.values(Priority).map((value) => (
-                    <option value={Priority[value]} key={Priority[value]}>
-                      {Priority[value]}
-                    </option>
-                  ))}
-                </select>
-
-                <label className="flex w-full flex-col justify-between gap-2 text-neutral-200">
-                  !!! must be after today !!!
-                  <input
-                    type="date"
-                    name="deadline"
-                    value={deadline}
-                    onChange={(e) => {
-                      setDeadline(e.target.value);
-                    }}
-                    className="w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                  />{" "}
-                </label>
-                <label className="flex w-full justify-between text-neutral-200">
-                  public goal
-                  <input
-                    type="checkbox"
-                    name="isPublic"
-                    checked={isPublic}
-                    onChange={(e) => {
-                      setIsPublic(e.target.checked);
-                    }}
-                    placeholder="description..."
-                  />
-                </label>
-                <select
-                  name="category"
-                  value={categoryId}
-                  onChange={(e) => {
-                    setCategoryId(e.target.value);
-                  }}
-                  className="w-full rounded-md bg-neutral-700 bg-transparent p-1 text-neutral-200"
-                >
-                  <option value="" selected disabled hidden>
-                    Choose category
-                  </option>
-                  {categories?.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-                <div className="flex w-full justify-between gap-4">
-                  <Button type="button" variant="secondary">
-                    CANCEL
-                  </Button>
-                  <Button type="submit">SUBMIT</Button>
-                </div>
-              </form>
+              <CreateGoal
+                refetchGoals={() => {
+                  void refetchGoals();
+                }}
+              />
             }
           >
             Add Goal
           </ModalButton>
-          <ul className="flex flex-col gap-4 ">
+
+          <ul className="flex flex-wrap gap-4">
             {goals?.map((goal) => (
               <li
                 key={goal.id}
-                className="flex w-fit flex-col gap-4 rounded-md bg-neutral-800 p-8"
+                className="flex w-[250px] flex-col gap-4 rounded-md bg-neutral-800 p-8"
               >
                 <span className="text-neutral-300">{goal.title}</span>
                 <span className="text-neutral-300">{goal.description}</span>

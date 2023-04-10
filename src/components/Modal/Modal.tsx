@@ -21,10 +21,10 @@ export const Modal: React.FC<Props> = ({ isOpen, children, onClose }) => {
   return rootPortal
     ? createPortal(
         <div
-          className={`absolute left-0 top-0 flex min-h-[100vh] min-w-[100vw] 
-        items-center justify-center bg-neutral-900 ${
+          className={`fixed left-0 top-0 flex h-[100%] w-[100%]  
+        items-center justify-center bg-neutral-950 bg-opacity-90 backdrop-blur-sm ${
           isOpen
-            ? "pointer-events-auto opacity-95"
+            ? "pointer-events-auto opacity-1"
             : "pointer-events-none opacity-0"
         }`}
           onClick={handleOverlayClick}

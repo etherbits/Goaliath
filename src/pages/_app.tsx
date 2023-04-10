@@ -27,31 +27,31 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   };
 
   return (
-    <ClerkProvider
-      {...pageProps}
-      appearance={{
-        baseTheme: dark,
-        variables: {
-          colorPrimary: "#4f46e5",
-        },
-      }}
-    >
-      <PortalContext.Provider value={portals}>
-        {isPublicPage ? (
-          <Component {...pageProps} />
-        ) : (
-          <>
-            <SignedIn>
-              <Component {...pageProps} />
-            </SignedIn>
-            <SignedOut>
-              <RedirectToSignIn />
-            </SignedOut>
-          </>
-        )}
-        <div ref={portals.root} />
-      </PortalContext.Provider>
-    </ClerkProvider>
+    <PortalContext.Provider value={portals}>
+      <ClerkProvider
+        {...pageProps}
+        appearance={{
+          baseTheme: dark,
+          variables: {
+            colorPrimary: "#4f46e5",
+          },
+        }}
+      >
+          {isPublicPage ? (
+            <Component {...pageProps} />
+          ) : (
+            <>
+              <SignedIn>
+                <Component {...pageProps} />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            </>
+          )}
+      </ClerkProvider>
+      <div ref={portals.root} />
+    </PortalContext.Provider>
   );
 };
 
