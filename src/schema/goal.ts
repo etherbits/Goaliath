@@ -1,7 +1,7 @@
 import { Priority } from "@prisma/client";
 import { z } from "zod";
 
-const goalSchema = z.object({
+export const goalSchema = z.object({
   title: z.string().min(3).max(128),
   description: z.string(),
   priority: z.nativeEnum(Priority),
@@ -10,4 +10,21 @@ const goalSchema = z.object({
   categoryId: z.string().min(1),
 });
 
-export default goalSchema;
+export const goalFiltersSchema = z
+  .object({
+    isActive: z.boolean(),
+    categoryId: z.string().min(1),
+  })
+  .partial();
+
+export const goalSortSchema = z
+  .object({
+    title: z.enum(["asc", "desc"]),
+    deadline: z.enum(["asc", "desc"]),
+  })
+  .partial();
+
+export const goalInputSchema = z.object({
+  filterBy: goalFiltersSchema,
+  sortBy: goalSortSchema,
+});

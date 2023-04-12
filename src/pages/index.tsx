@@ -1,28 +1,22 @@
 import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { Header } from "~/components/Header";
-import { ModalButton } from "~/components/ModalButton";
-import { CreateCategory } from "~/components/modals/CreateCategory/CreateCategory";
-import { CreateGoal } from "~/components/modals/CreateGoal";
+import { Sidebar } from "~/components/Sidebar/Sidebar";
+import { useFilterStore } from "~/store/global";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { user } = useUser();
+ const goalInput = useFilterStore((state) => state.goalInput);
 
-  const { data: categories, refetch: refetchCategories } =
-    api.category.getAll.useQuery(undefined, {
-      enabled: !!user,
-    });
-
-  const { data: goals, refetch: refetchGoals } = api.goal.getAll.useQuery(
-    { sortBy: { field: "deadline", order: "asc" } },
+  const { data: goals } = api.goal.getAll.useQuery(
+    goalInput,
     {
-    enabled: !!user,
+      enabled: !!user,
     }
   );
-    // console.log(user)
+  
   return (
     <>
       <Head>
@@ -32,67 +26,30 @@ const Home: NextPage = () => {
       </Head>
       <div className="flex min-h-screen flex-col bg-neutral-900">
         <Header />
-        <main className="flex flex-col gap-8 p-12">
-          <ModalButton
-            variant="primary"
-            ModalComponent={
-              <CreateCategory
-                refetchCategories={() => {
-                  void refetchCategories();
-                }}
-              />
-            }
-          >
-            Add Category
-          </ModalButton>
-
-          <ul className="flex flex-col gap-4 ">
-            {categories?.map((category) => (
-              <li key={category.id} className="flex gap-2">
-                <Image
-                  src={category.icon}
-                  width={24}
-                  height={24}
-                  alt="category"
-                />
-                <span className="text-neutral-300 ">{category.name}</span>
-              </li>
-            ))}
-          </ul>
-
-          <ModalButton
-            variant="primary"
-            ModalComponent={
-              <CreateGoal
-                refetchGoals={() => {
-                  void refetchGoals();
-                }}
-              />
-            }
-          >
-            Add Goal
-          </ModalButton>
-
-          <ul className="flex flex-wrap gap-4">
-            {goals?.map((goal) => (
-              <li
-                key={goal.id}
-                className="flex w-[250px] flex-col gap-4 rounded-md bg-neutral-800 p-8"
-              >
-                <span className="text-neutral-300">{goal.title}</span>
-                <span className="text-neutral-300">{goal.description}</span>
-                <span className="text-neutral-300">
-                  Priority: {goal.priority}
-                </span>
-                <span className="text-neutral-300">
-                  Deadline: {goal.deadline?.toDateString()}
-                </span>
-                <span className="text-neutral-300">
-                  isPublic: {String(goal.isPublic)}
-                </span>
-              </li>
-            ))}
-          </ul>
+        <main className="flex gap-8 p-12">
+          <Sidebar />
+          <div >
+            <ul className="flex flex-wrap gap-4">
+              {goals?.map((goal) => (
+                <li
+                  key={goal.id}
+                  className="flex w-[250px] flex-col gap-4 rounded-md bg-neutral-800 p-8"
+                >
+                  <span className="text-neutral-300">{goal.title}</span>
+                  <span className="text-neutral-300">{goal.description}</span>
+                  <span className="text-neutral-300">
+                    Priority: {goal.priority}
+                  </span>
+                  <span className="text-neutral-300">
+                    Deadline: {goal.deadline?.toDateString()}
+                  </span>
+                  <span className="text-neutral-300">
+                    isPublic: {String(goal.isPublic)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </main>
       </div>
     </>

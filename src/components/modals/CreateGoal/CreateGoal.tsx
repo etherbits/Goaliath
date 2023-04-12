@@ -4,17 +4,19 @@ import React, { useContext, useState } from "react";
 import { Button } from "~/components/Button";
 import { ModalContext } from "~/context/useModal";
 import { api } from "~/utils/api";
+import { useFilterStore } from "~/store/global";
 
-interface Props {
-  refetchGoals: () => void;
-}
-
-export const CreateGoal: React.FC<Props> = ({ refetchGoals }) => {
+export const CreateGoal: React.FC = () => {
   const { toggleModal } = useContext(ModalContext);
-
+  const goalInput = useFilterStore((state) => state.goalInput);
+console.log(goalInput)
   const { user } = useUser();
 
   const { data: categories } = api.category.getAll.useQuery(undefined, {
+    enabled: !!user,
+  });
+
+  const { refetch: refetchGoals } = api.goal.getAll.useQuery(goalInput, {
     enabled: !!user,
   });
 
@@ -24,12 +26,12 @@ export const CreateGoal: React.FC<Props> = ({ refetchGoals }) => {
     },
   });
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("test");
+  const [description, setDescription] = useState("desc");
   const [priority, setPriority] = useState<Priority>(Priority.LOW);
-  const [deadline, setDeadline] = useState("");
+  const [deadline, setDeadline] = useState("2023-04-22");
   const [isPublic, setIsPublic] = useState(false);
-  const [categoryId, setCategoryId] = useState("");
+  const [categoryId, setCategoryId] = useState("clgdm8dua0000ueawdbmacf4l");
 
   const handleGoalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +55,7 @@ export const CreateGoal: React.FC<Props> = ({ refetchGoals }) => {
     >
       <h3 className="text-lg font-medium text-neutral-50">Create Goal</h3>
       <input
+        autoFocus={true}
         type="text"
         name="title"
         placeholder="title"

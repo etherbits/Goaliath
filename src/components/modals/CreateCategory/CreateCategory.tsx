@@ -1,14 +1,19 @@
+import { useUser } from "@clerk/nextjs";
 import React, { useContext, useState } from "react";
 import { Button } from "~/components/Button";
 import { ModalContext } from "~/context/useModal";
 import { api } from "~/utils/api";
 
-interface Props {
-  refetchCategories: () => void;
-}
-
-export const CreateCategory: React.FC<Props> = ({ refetchCategories }) => {
+export const CreateCategory: React.FC = () => {
+  const user = useUser();
   const { toggleModal } = useContext(ModalContext);
+
+  const { refetch: refetchCategories } = api.category.getAll.useQuery(
+    undefined,
+    {
+      enabled: !!user,
+    }
+  );
 
   const { mutate: mutateCategory } = api.category.create.useMutation({
     onSuccess: () => {
