@@ -19,10 +19,10 @@ const Home: NextPage = () => {
   const { data: goals, refetch: refetchGoals } = api.goal.getAll.useQuery(
     { sortBy: { field: "deadline", order: "asc" } },
     {
-      enabled: !!user,
+    enabled: !!user,
     }
   );
-
+    // console.log(user)
   return (
     <>
       <Head>

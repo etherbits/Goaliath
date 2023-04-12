@@ -1,20 +1,33 @@
-import { withClerkMiddleware } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { withClerkMiddleware, getAuth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default withClerkMiddleware((_req: NextRequest) => {
-  return NextResponse.next()
-})
+// Set the paths that don't require the user to be signed in
+const publicPaths = ["/sign-in*", "/sign-up*"];
 
-// Stop Middleware running on static files
+const isPublic = (path: string) => {
+  return publicPaths.find((x) =>
+    path.match(new RegExp(`^${x}$`.replace("*$", "($|/)")))
+  );
+};
+
+export default withClerkMiddleware((request: NextRequest) => {
+  if (isPublic(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+
+  const { userId } = getAuth(request);
+
+  if (!userId) {
+    const signInUrl = new URL("/sign-in", request.url);
+    signInUrl.searchParams.set("redirect_url", request.url);
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  return NextResponse.next();
+});
+
+// Stop Middleware running on static files and public folder
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next
-     * - static (static files)
-     * - favicon.ico (favicon file)
-     */
-    "/(.*?trpc.*?|(?!static|.*\\..*|_next|favicon.ico).*)"
-  ]
-}
+  matcher: ["/(.*?trpc.*?|(?!static|.*\\..*|_next|favicon.ico).*)", "/"],
+};
