@@ -4,19 +4,18 @@ import { ModalButton } from "../ModalButton";
 import { CreateCategory } from "../modals/CreateCategory/CreateCategory";
 import { CreateGoal } from "../modals/CreateGoal";
 import { useFilterStore } from "~/store/global";
-import { ChangeEvent, ChangeEventHandler } from "react";
 
 export const Sidebar = () => {
   const user = useUser();
-  const addGoalFilter = useFilterStore((state) => state.addGoalFilter);
+  const { goalInput, addGoalFilter } = useFilterStore((state) => state);
 
   const { data: categories } = api.category.getAll.useQuery(undefined, {
     enabled: !!user,
   });
 
-  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
-    addGoalFilter("categoryId", e.target.value);
-  };
+  // const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   addGoalFilter("categoryId", e.target.value);
+  // };
 
   return (
     <div className="flex flex-col ">
@@ -37,7 +36,12 @@ export const Sidebar = () => {
       <ModalButton variant="primary" ModalComponent={<CreateGoal />}>
         Add Goal
       </ModalButton>
-      <input onChange={handleFilterChange} />
+      <input
+        value={goalInput.filterBy.categoryId}
+        onChange={(e) => {
+          addGoalFilter("categoryId", e.target.value);
+        }}
+      />
     </div>
   );
 };

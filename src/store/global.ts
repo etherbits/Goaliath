@@ -33,7 +33,7 @@ const addFilter = (
     goalInput.filterBy.isActive = value;
   }
 
-  return goalInput;
+  return { ...goalInput };
 };
 
 const changeSort = (
@@ -43,7 +43,7 @@ const changeSort = (
 ): GoalInput => {
   goalInput.sortBy[field] = value;
 
-  return goalInput;
+  return { ...goalInput };
 };
 
 export const useFilterStore = create<FilterStore>()((set) => ({

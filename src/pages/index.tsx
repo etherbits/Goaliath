@@ -8,15 +8,12 @@ import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { user } = useUser();
- const goalInput = useFilterStore((state) => state.goalInput);
+  const goalInput = useFilterStore((state) => state.goalInput);
 
-  const { data: goals } = api.goal.getAll.useQuery(
-    goalInput,
-    {
-      enabled: !!user,
-    }
-  );
-  
+  const { data: goals } = api.goal.getAll.useQuery(goalInput, {
+    enabled: !!user,
+  });
+
   return (
     <>
       <Head>
@@ -28,7 +25,7 @@ const Home: NextPage = () => {
         <Header />
         <main className="flex gap-8 p-12">
           <Sidebar />
-          <div >
+          <div>
             <ul className="flex flex-wrap gap-4">
               {goals?.map((goal) => (
                 <li

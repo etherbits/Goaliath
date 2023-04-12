@@ -9,7 +9,6 @@ import { useFilterStore } from "~/store/global";
 export const CreateGoal: React.FC = () => {
   const { toggleModal } = useContext(ModalContext);
   const goalInput = useFilterStore((state) => state.goalInput);
-console.log(goalInput)
   const { user } = useUser();
 
   const { data: categories } = api.category.getAll.useQuery(undefined, {

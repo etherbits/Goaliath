@@ -7,9 +7,7 @@ interface ModalContext {
 
 export const ModalContext = createContext<ModalContext>({
   isOpen: false,
-  toggleModal: () => {
-    console.log("hello")
-  },
+  toggleModal: () => void {},
 });
 
 export const ModalProvider: React.FC<PropsWithChildren> = ({ children }) => {
