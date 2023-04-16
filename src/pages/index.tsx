@@ -1,16 +1,16 @@
 import { useUser } from "@clerk/nextjs";
+import { useAtom } from "jotai";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { Header } from "~/components/Header";
-import { Sidebar } from "~/components/Sidebar/Sidebar";
-import { useFilterStore } from "~/store/global";
+import { Sidebar, searchParamsAtom } from "~/components/Sidebar/Sidebar";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { user } = useUser();
-  const goalInput = useFilterStore((state) => state.goalInput);
-
-  const { data: goals } = api.goal.getAll.useQuery(goalInput, {
+  const [searchParams] = useAtom(searchParamsAtom)
+console.log(searchParams)
+    const { data: goals } = api.goal.getAll.useQuery(searchParams, {
     enabled: !!user,
   });
 

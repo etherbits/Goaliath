@@ -25,6 +25,6 @@ export const goalSortSchema = z
   .partial();
 
 export const goalInputSchema = z.object({
-  filterBy: goalFiltersSchema,
-  sortBy: goalSortSchema,
+  filters: goalFiltersSchema,
+  sorts: goalSortSchema,
 });

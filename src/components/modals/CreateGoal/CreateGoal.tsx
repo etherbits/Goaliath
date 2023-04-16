@@ -1,21 +1,22 @@
 import { useUser } from "@clerk/nextjs";
 import { Priority } from "@prisma/client";
+import { useAtom } from "jotai";
 import React, { useContext, useState } from "react";
 import { Button } from "~/components/Button";
+import { searchParamsAtom } from "~/components/Sidebar/Sidebar";
 import { ModalContext } from "~/context/useModal";
 import { api } from "~/utils/api";
-import { useFilterStore } from "~/store/global";
 
 export const CreateGoal: React.FC = () => {
   const { toggleModal } = useContext(ModalContext);
-  const goalInput = useFilterStore((state) => state.goalInput);
   const { user } = useUser();
+  const [searchParams] = useAtom(searchParamsAtom)
 
   const { data: categories } = api.category.getAll.useQuery(undefined, {
     enabled: !!user,
   });
 
-  const { refetch: refetchGoals } = api.goal.getAll.useQuery(goalInput, {
+  const { refetch: refetchGoals } = api.goal.getAll.useQuery(searchParams, {
     enabled: !!user,
   });
 

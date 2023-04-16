@@ -1,5 +1,4 @@
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
-import { z } from "zod";
 import { goalInputSchema, goalSchema } from "~/schema/goal";
 
 export const goalRouter = createTRPCRouter({
@@ -20,10 +19,10 @@ export const goalRouter = createTRPCRouter({
         take: 100,
         where: {
           userId: ctx.userId,
-          categoryId: input.filterBy.categoryId,
-          isActive: input.filterBy.isActive,
+          categoryId: input.filters.categoryId,
+          isActive: input.filters.isActive,
         },
-        orderBy: input.sortBy,
+        orderBy: input.sorts,
       });
     }),
 });
