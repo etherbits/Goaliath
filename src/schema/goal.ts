@@ -28,3 +28,6 @@ export const goalInputSchema = z.object({
   filters: goalFiltersSchema,
   sorts: goalSortSchema,
 });
+
+export type Filters = z.infer<typeof goalFiltersSchema>
+export type Sorts = z.infer<typeof goalSortSchema>

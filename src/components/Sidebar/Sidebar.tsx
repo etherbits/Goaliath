@@ -4,20 +4,21 @@ import { ModalButton } from "../ModalButton";
 import { CreateCategory } from "../modals/CreateCategory/CreateCategory";
 import { CreateGoal } from "../modals/CreateGoal";
 import { atom, useAtom } from "jotai";
+import type { Filters, Sorts } from "~/schema/goal"
 
-const filtersAtom = atom({
-    isActive: true,
-    categoryId: ""
-    });
+const filtersAtom = atom<Filters>({
+  isActive: true,
+  categoryId: ""
+});
 
-const sortsAtom = atom({
-    deadline: "asc",
-    });
+const sortsAtom = atom<Sorts>({
+  deadline: "asc",
+});
 
 export const searchParamsAtom = atom((get) => ({
-    filters: get(filtersAtom),
-    sorts: get(sortsAtom)
-    }));
+  filters: get(filtersAtom),
+  sorts: get(sortsAtom)
+}));
 
 export const Sidebar = () => {
   const user = useUser();
@@ -26,10 +27,6 @@ export const Sidebar = () => {
   const { data: categories } = api.category.getAll.useQuery(undefined, {
     enabled: !!user,
   });
-
-  // const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   addGoalFilter("categoryId", e.target.value);
-  // };
 
   return (
     <div className="flex flex-col ">
@@ -53,7 +50,7 @@ export const Sidebar = () => {
       <input
         value={filters.categoryId}
         onChange={(e) => {
-          setFilters(currentFilters => ({...currentFilters, categoryId: e.target.value}))
+          setFilters(currentFilters => ({ ...currentFilters, categoryId: e.target.value }))
         }}
       />
     </div>
