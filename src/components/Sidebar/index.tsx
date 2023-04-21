@@ -52,9 +52,14 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-      <ModalButton variant="primary" ModalComponent={<CreateGoal />}>
-        Add Goal
-      </ModalButton>
+      <div className="flex justify-between">
+        <ModalButton variant="primary" ModalComponent={<CreateGoal />}>
+          Add Goal
+        </ModalButton>
+        <ModalButton variant="regular" ModalComponent={<CreateGoal />}>
+          Delete Goals
+        </ModalButton>
+      </div>
     </div>
   );
 };
