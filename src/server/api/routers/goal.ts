@@ -19,7 +19,6 @@ export const goalRouter = createTRPCRouter({
         take: 100,
         where: {
           userId: ctx.userId,
-          categoryId: input.filters.categoryId,
           isActive: input.filters.isActive,
         },
         orderBy: input.sorts,

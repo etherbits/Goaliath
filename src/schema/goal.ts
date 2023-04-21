@@ -13,7 +13,7 @@ export const goalSchema = z.object({
 export const goalFiltersSchema = z
   .object({
     isActive: z.boolean(),
-    categoryId: z.string().min(1),
+    categoryId: z.string(),
   })
   .partial();
 
