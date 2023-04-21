@@ -8,6 +8,7 @@ import type { Filters, Sorts } from "~/schema/goal"
 import Category from "./Category";
 import { Priority } from "@prisma/client";
 import PriorityTag from "./PriorityTag";
+import Search from "./Search";
 
 const filtersAtom = atom<Filters>({
   isActive: true,
@@ -33,6 +34,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col gap-9">
+      <Search placeholder="Search" />
       <div>
         <h4 className="text-neutral-400 mb-5">Categories</h4>
         <ul className="flex flex-col gap-1">
