@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const Modal: React.FC<Props> = ({ isOpen, children, onClose }) => {
+const Modal: React.FC<Props> = ({ isOpen, children, onClose }) => {
   const portals = useContext(PortalContext);
   const rootPortal = portals?.root?.current;
 
@@ -20,18 +20,19 @@ export const Modal: React.FC<Props> = ({ isOpen, children, onClose }) => {
 
   return rootPortal
     ? createPortal(
-        <div
-          className={`fixed left-0 top-0 flex h-[100%] w-[100%]  
-        items-center justify-center bg-neutral-950 bg-opacity-90 backdrop-blur-sm ${
-          isOpen
+      <div
+        className={`fixed left-0 top-0 flex h-[100%] w-[100%]
+        items-center justify-center bg-neutral-950 bg-opacity-90 backdrop-blur-sm ${isOpen
             ? "pointer-events-auto opacity-1"
             : "pointer-events-none opacity-0"
-        }`}
-          onClick={handleOverlayClick}
-        >
-          {children}
-        </div>,
-        rootPortal
-      )
+          }`}
+        onClick={handleOverlayClick}
+      >
+        {children}
+      </div>,
+      rootPortal
+    )
     : null;
 };
+
+export default Modal;

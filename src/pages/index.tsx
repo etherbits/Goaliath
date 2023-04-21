@@ -2,15 +2,15 @@ import { useUser } from "@clerk/nextjs";
 import { useAtom } from "jotai";
 import { type NextPage } from "next";
 import Head from "next/head";
-import { Header } from "~/components/Header";
-import { Sidebar, searchParamsAtom } from "~/components/Sidebar/Sidebar";
+import Header from "~/components/Header";
+import Sidebar, { searchParamsAtom } from "~/components/Sidebar";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { user } = useUser();
   const [searchParams] = useAtom(searchParamsAtom)
-console.log(searchParams)
-    const { data: goals } = api.goal.getAll.useQuery(searchParams, {
+
+  const { data: goals } = api.goal.getAll.useQuery(searchParams, {
     enabled: !!user,
   });
 

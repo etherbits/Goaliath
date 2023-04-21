@@ -1,10 +1,11 @@
+
 import { useUser } from "@clerk/nextjs";
 import React, { useContext, useState } from "react";
-import { Button } from "~/components/Button";
+import Button from "~/components/Button";
 import { ModalContext } from "~/context/useModal";
 import { api } from "~/utils/api";
 
-export const CreateCategory: React.FC = () => {
+const CreateCategory: React.FC = () => {
   const user = useUser();
   const { toggleModal } = useContext(ModalContext);
 
@@ -70,3 +71,5 @@ export const CreateCategory: React.FC = () => {
     </form>
   );
 };
+
+export default CreateCategory;

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Button, type ButtonProps } from "../Button/Button";
-import { Modal } from "../Modal/Modal";
+import Button, { type ButtonProps } from "../Button";
+import Modal from "../Modal";
 import { ModalContext, ModalProvider } from "~/context/useModal";
 
 interface Props extends ButtonProps {
@@ -10,7 +10,7 @@ interface Props extends ButtonProps {
 const ModalButton: React.FC<Props> = (props) => {
   const { ModalComponent, ...rest } = props;
 
-  const {isOpen, toggleModal} = useContext(ModalContext)
+  const { isOpen, toggleModal } = useContext(ModalContext)
 
   return (
     <>
@@ -22,8 +22,10 @@ const ModalButton: React.FC<Props> = (props) => {
   );
 };
 
-export const ModalButtonWrapper: React.FC<Props> = (props) =>{
+const ModalButtonWrapper: React.FC<Props> = (props) => {
   return <ModalProvider>
-    <ModalButton {...props}/>
+    <ModalButton {...props} />
   </ModalProvider>
 }
+
+export { ModalButtonWrapper as default };

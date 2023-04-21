@@ -1,8 +1,8 @@
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/utils/api";
-import { ModalButton } from "../ModalButton";
-import { CreateCategory } from "../modals/CreateCategory/CreateCategory";
-import { CreateGoal } from "../modals/CreateGoal";
+import ModalButton from "../ModalButton";
+import CreateCategory from "../modals/CreateCategory";
+import CreateGoal from "../modals/CreateGoal";
 import { atom, useAtom } from "jotai";
 import type { Filters, Sorts } from "~/schema/goal"
 
@@ -20,7 +20,7 @@ export const searchParamsAtom = atom((get) => ({
   sorts: get(sortsAtom)
 }));
 
-export const Sidebar = () => {
+const Sidebar = () => {
   const user = useUser();
   const [filters, setFilters] = useAtom(filtersAtom);
 
@@ -56,3 +56,5 @@ export const Sidebar = () => {
     </div>
   );
 };
+
+export default Sidebar;

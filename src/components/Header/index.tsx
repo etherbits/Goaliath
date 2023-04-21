@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { UserButton } from "@clerk/nextjs";
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const router = useRouter();
   return (
-    <header className="flex h-24 w-full items-center justify-between px-9">
+    <header className="flex h-24 w-full items-center justify-between px-9" >
       <Link href={"#"}>
         <Image
           src="/assets/images/logo.svg"
@@ -17,35 +17,33 @@ export const Header: React.FC = () => {
           alt="logo"
         />
       </Link>
-      <nav className="flex items-center gap-4">
+      < nav className="flex items-center gap-4" >
         <Link
           href={"#"}
-          className={`text-base ${
-            router.pathname === "/" ? "text-indigo-400" : "text-neutral-200"
-          }`}
+          className={`text-base ${router.pathname === "/" ? "text-indigo-400" : "text-neutral-200"
+            }`
+          }
         >
           Goals
         </Link>
         <Link
           href={"#"}
-          className={`text-base ${
-            router.pathname === "/feed" ? "text-indigo-400" : "text-neutral-200"
-          }`}
+          className={`text-base ${router.pathname === "/feed" ? "text-indigo-400" : "text-neutral-200"
+            }`}
         >
           Feed
         </Link>
         <Link
           href={"#"}
-          className={`text-base ${
-            router.pathname === "/dashboard"
-              ? "text-indigo-400"
-              : "text-neutral-200"
-          }`}
+          className={`text-base ${router.pathname === "/dashboard"
+            ? "text-indigo-400"
+            : "text-neutral-200"
+            }`}
         >
           Dashboard
         </Link>
 
-        <UserButton
+        < UserButton
           appearance={{
             elements: {
               userButtonAvatarBox: {
@@ -59,3 +57,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
+export default Header;
