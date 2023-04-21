@@ -5,6 +5,7 @@ import CreateCategory from "../modals/CreateCategory";
 import CreateGoal from "../modals/CreateGoal";
 import { atom, useAtom } from "jotai";
 import type { Filters, Sorts } from "~/schema/goal"
+import Category from "./Category";
 
 const filtersAtom = atom<Filters>({
   isActive: true,
@@ -29,21 +30,19 @@ const Sidebar = () => {
   });
 
   return (
-    <div className="flex flex-col ">
-      <ul>
-        {categories?.map((category) => (
-          <li key={category.id}>{category.name}</li>
-        ))}
-      </ul>
-      <ul>
-        {categories?.map((category) => (
-          <li key={category.id}>{category.id}</li>
-        ))}
-      </ul>
-      <ModalButton variant="primary" ModalComponent={<CreateCategory />}>
-        Add Category
-      </ModalButton>
-      --
+    <div className="flex flex-col gap-9">
+      <div>
+        <h4 className="text-neutral-400 mb-5">Categories</h4>
+        <ul className="flex flex-col gap-2">
+          {categories?.map((category) => (
+            <li key={category.id}><Category category={category} /></li>
+          ))}
+        </ul>
+        <ModalButton variant="regular" ModalComponent={<CreateCategory />} className="mt-4 w-full">
+          Add Category
+        </ModalButton>
+      </div>
+
       <ModalButton variant="primary" ModalComponent={<CreateGoal />}>
         Add Goal
       </ModalButton>
